@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignUp Page</title>
+</head>
+<body>
+      <div>
+        <h1>SignUp Page</h1>
+        <form>
+            <input type="text" name="name" placeholder="Enter your name">
+            <input type="text" name="email" placeholder="Enter your email">
+            <input type="password" name="password" placeholder="Enter your password">
+            <input type="password" name="confirm_password" placeholder="Confirm your password">
+            <button type="submit">Submit</button>
+        </form>
+      
+      </div>
+
+      <script>
+             
+             const form = document.querySelector('form');
+             const nameInput = document.querySelector('input[name="name"]');
+             const emailInput = document.querySelector('input[name="email"]');
+             const passwordInput = document.querySelector('input[name="password"]');
+             const confirm_passwordInput = document.querySelector('input[name="confirm_password"]');
+
+
+             form.addEventListener("submit", implementSignup)
+
+             const userArr = [
+                 {id: 1, name: "Abhishek Kumar", email: "abhishek@gmail.com", password: "Abhishek123#!" },
+                 {id: 2, name: "Anubhav Kumar", email: "anubhav@gmail.com", password: "Anubhav123#!" }
+
+             ]
+
+
+             function implementSignup(e){
+                  e.preventDefault();
+                    const name = nameInput.value;
+                    const email = emailInput.value;
+                    const password = passwordInput.value;
+                    const confirm_password = confirm_passwordInput.value;
+
+                    if(!name.trim().includes(" ")){
+                        alert("Enter both your First and Last name");
+                    }
+
+                    else if(email.includes("@")==false || email.includes(".")==false){
+                        alert("Enter a valid email");
+                    }
+
+                    // passwod strength check
+
+                    else if(password != confirm_password){
+                        alert("Passwords do not match");
+                    }
+
+                    else if(checkEmail(email)==true){
+                         alert("Email already exists");
+                    }
+
+                    else{
+                       
+                       let newUser = {id: userArr.length+1, name: name, email: email, password: password};
+                        userArr.push(newUser);
+
+                        // console.log(userArr);
+                        const userArrayJson = JSON.stringify(userArr);
+                        localStorage.setItem("users", userArrayJson);
+
+
+                        alert("You have successfully signed up");
+                    }
+
+
+             }
+
+
+
+             function checkEmail(enteredEmail){
+              const foundUser =  userArr.filter(user => user.email == enteredEmail)
+                if(foundUser.length > 0){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+  
+             }
+           
+
+
+      </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+</head>
+<body>
+       <h1>Login Page</h1>
+       <form>
+              <input type="text" name="email" placeholder="Enter your email">
+              <input type="password" name="password" placeholder="Enter your password">
+              <button type="submit">Submit</button>
+       </form>
+
+       <script>
+              
+             const form = document.querySelector('form');
+             const emailInput = document.querySelector('input[name="email"]');
+             const passwordInput = document.querySelector('input[name="password"]');
+
+             form.addEventListener("submit", implementLogin)
+
+             let userArr 
+
+             function implementLogin(e){
+                e.preventDefault(); 
+                const email = emailInput.value;
+                const password = passwordInput.value;
+
+                 const userArrJson = localStorage.getItem("users");
+                 userArr = JSON.parse(userArrJson);
+
+                const foundUser = userArr.filter(user => user.email == email);
+
+                if(foundUser.length == 0){
+                     alert("User not found");
+                }
+                else{
+                      if(foundUser[0].password == password){
+                           let token = generateToken();
+                           let loginUserIndex = findIndex(email);
+                            userArr[loginUserIndex].token = token;
+                            localStorage.setItem("users", JSON.stringify(userArr));
+
+                            
+
+                            alert("Login Successful");
+                            window.location.href = "./dashboard.html";
+                      }
+                      else{
+                            alert("Incorrect Password");
+                      }
+                }
+
+
+             }
+
+             function generateToken(){
+                  let str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&$#@";
+                  let token = "";
+                  for(let i = 0; i<=9; i++){
+                        let randomIndex = Math.floor(Math.random()*str.length);
+                        token = token + str[randomIndex];
+                  }
+                  return token;
+             }
+
+
+             function findIndex(email){
+                  for(let i = 0; i<userArr.length; i++){
+                        if(userArr[i].email == email){
+                              return i;
+                        }
+                  }
+             }
+
+       </script>
+</body>
+</html>
+
+
+
+<!-- [{"id":1,"name":"Abhishek Kumar","email":"abhishek@gmail.com","password":"Abhishek123#!"},{"id":2,"name":"Anubhav Kumar","email":"anubhav@gmail.com","password":"Anubhav123#!"},{"id":3,"name":"Abhishek Choudhary","email":"student1@gmail.com","password":"123456","token":"G1sHJTuGMR"},{"id":4,"name":"Abhishek Choudhary","email":"abhishek@brainysensei.com","password":"123456"}] -->
